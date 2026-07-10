@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción a la Comunidad - Tierra Media</title>
+    <!-- Vinculación del archivo CSS externo -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Convocatoria de la Tierra Media</h1>
+    <p class="subtitle">Une tu fuerza contra la sombra de Mordor. Registra tus datos para unirte a la Alianza.</p>
+
+    <!-- FORMULARIO -->
+    <form id="lotrForm" novalidate>
+        
+        <!-- Input de Texto (Nombre) -->
+        <div class="form-group">
+            <label for="nombre">Nombre del Guerrero / Heroína</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej. Aragorn, Galadriel...">
+            <div class="error-message" id="error-nombre">El nombre es obligatorio (mínimo 3 caracteres).</div>
+        </div>
+
+        <!-- Input de Texto / Correo electrónico -->
+        <div class="form-group">
+            <label for="correo">Mensajería del Reino (Correo electrónico)</label>
+            <input type="email" id="correo" name="correo" placeholder="ejemplo@rivendell.com">
+            <div class="error-message" id="error-correo">Por favor, introduce un correo electrónico válido.</div>
+        </div>
+
+        <!-- Select (Raza) -->
+        <div class="form-group">
+            <label for="raza">Linaje o Raza</label>
+            <select id="raza" name="raza">
+                <option value="">-- Elige tu procedencia --</option>
+                <option value="Hombres">Hombres (Gondor / Rohan)</option>
+                <option value="Elfos">Elfos (Rivendell / Lothlórien)</option>
+                <option value="Enanos">Enanos (Erebor / Moria)</option>
+                <option value="Hobbits">Hobbits (La Comarca)</option>
+                <option value="Istari">Istari (Magos)</option>
+            </select>
+            <div class="error-message" id="error-raza">Debes seleccionar un linaje de origen.</div>
+        </div>
+
+        <!-- Input Radio (Bando) -->
+        <div class="form-group">
+            <label>Preferencia de Combate</label>
+            <div class="radio-group" id="bandoContainer">
+                <label class="radio-option">
+                    <input type="radio" name="combate" value="Cuerpo a Cuerpo"> Vanguardia (Espada / Hacha / Lanza)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="combate" value="A Distancia"> Retaguardia (Arco / Magia)
+                </label>
+            </div>
+            <div class="error-message" id="error-combate">Selecciona tu estilo de combate predilecto.</div>
+        </div>
+
+        <!-- Textarea (Motivación) -->
+        <div class="form-group">
+            <label for="motivacion">¿Por qué deseas unirte a la Comunidad? (Detalles del viaje)</label>
+            <textarea id="motivacion" name="motivacion" placeholder="Escribe tus razones o hazañas previas..."></textarea>
+            <div class="error-message" id="error-motivacion">Cuéntanos un poco sobre tu historia (mínimo 10 caracteres).</div>
+        </div>
+
+        <!-- Checkbox (Términos) -->
+        <div class="form-group">
+            <div class="checkbox-group" id="terminosContainer">
+                <label class="checkbox-option">
+                    <input type="checkbox" id="terminos" name="terminos"> Juro lealtad al Portador del Anillo y a los Pueblos Libres.
+                </label>
+            </div>
+            <div class="error-message" id="error-terminos">Debes jurar lealtad para continuar.</div>
+        </div>
+
+        <!-- Botón de Envío -->
+        <button type="submit">Enviar Registro a Rivendell</button>
+    </form>
+
+    <!-- SECCIÓN DE REGISTROS DINÁMICOS -->
+    <div class="records-section">
+        <h2>Guerreros Convocados</h2>
+        <div class="table-container">
+            <table id="recordsTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Mensajería</th>
+                        <th>Linaje</th>
+                        <th>Estilo</th>
+                        <th>Historia / Motivación</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsBody">
+                    <tr id="emptyRow">
+                        <td colspan="5" class="empty-message">Aún no se han enlistado guerreros para la batalla.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('lotrForm');
+        const recordsBody = document.getElementById('recordsBody');
+        const emptyRow = document.getElementById('emptyRow');
+
+        form.addEventListener('submit', function(event) {
+            // 1. Detener el envío por defecto
+            event.preventDefault();
+
+            // Limpiar errores previos en pantalla
+            clearErrors();
+
+            // 2. Captura de elementos
+            const nombre = document.getElementById('nombre');
+            const correo = document.getElementById('correo');
+            const raza = document.getElementById('raza');
+            const combateRadios = document.getElementsByName('combate');
+            const motivacion = document.getElementById('motivacion');
+            const terminos = document.getElementById('terminos');
+
+            let isValid = true;
+
+            // 3. LÓGICA DE VALIDACIÓN
+
+            // Validación: Nombre
+            if (nombre.value.trim().length < 3) {
+                showError(nombre, 'error-nombre');
+                isValid = false;
+            }
+
+            // Validación: Correo electrónico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correo.value.trim())) {
+                showError(correo, 'error-correo');
+                isValid = false;
+            }
+
+            // Validación: Select (Raza)
+            if (raza.value === "") {
+                showError(raza, 'error-raza');
+                isValid = false;
+            }
+
+            // Validación: Radio (Estilo de combate)
+            let radioChecked = false;
+            let combateValue = "";
+            for (const radio of combateRadios) {
+                if (radio.checked) {
+                    radioChecked = true;
+                    combateValue = radio.value;
+                    break;
+                }
+            }
+            if (!radioChecked) {
+                document.getElementById('bandoContainer').classList.add('is-invalid-check');
+                document.getElementById('error-combate').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validación: Textarea (Motivación)
+            if (motivacion.value.trim().length < 10) {
+                showError(motivacion, 'error-motivacion');
+                isValid = false;
+            }
+
+            // Validación: Checkbox (Términos)
+            if (!terminos.checked) {
+                document.getElementById('terminosContainer').classList.add('is-invalid-check');
+                document.getElementById('error-terminos').style.display = 'block';
+                isValid = false;
+            }
+
+            // 4. PROCESAMIENTO EXITOSO
+            if (isValid) {
+                // Ocultar mensaje de tabla vacía
+                if (emptyRow) {
+                    emptyRow.style.display = 'none';
+                }
+
+                // Insertar dinámicamente la nueva fila con los datos sanitizados
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><strong>${escapeHTML(nombre.value.trim())}</strong></td>
+                    <td>${escapeHTML(correo.value.trim())}</td>
+                    <td><span style="font-weight:500;">${raza.value}</span></td>
+                    <td>${combateValue}</td>
+                    <td>${escapeHTML(motivacion.value.trim())}</td>
+                `;
+
+                recordsBody.appendChild(newRow);
+
+                // Reiniciar campos del formulario
+                form.reset();
+            }
+        });
+
+        // --- FUNCIONES AUXILIARES DE UI Y CONTROL ---
+
+        function showError(element, errorId) {
+            element.classList.add('is-invalid');
+            document.getElementById(errorId).style.display = 'block';
+        }
+
+        function clearErrors() {
+            const invalidElements = document.querySelectorAll('.is-invalid, .is-invalid-check');
+            invalidElements.forEach(el => el.classList.remove('is-invalid', 'is-invalid-check'));
+
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+/* --- PALETA DE COLORES Y VARIABLES --- */
+:root {
+    --verde-oscuro: #1b3322;
+    --verde-elfico: #2d5a3b;
+    --verde-brillante: #448057;
+    --gris-piedra: #e5e7eb;
+    --gris-pizarra: #4b5563;
+    --gris-fondo: #f9fafb;
+    --alerta-rojo: #991b1b;
+    --alerta-fondo: #fef2f2;
+}
+
+/* --- ESTILOS GENERALES --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--gris-fondo);
+    color: #1f2937;
+    line-height: 1.6;
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(27, 51, 34, 0.08);
+    border-top: 8px solid var(--verde-oscuro);
+}
+
+h1 {
+    color: var(--verde-oscuro);
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--gris-pizarra);
+    margin-bottom: 2.5rem;
+    font-style: italic;
+}
+
+/* --- ESTILOS DEL FORMULARIO --- */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--verde-oscuro);
+}
+
+/* Campos de texto, select y textarea */
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--gris-piedra);
+    border-radius: 6px;
+    background-color: #fff;
+    color: #1f2937;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--verde-elfico);
+    box-shadow: 0 0 0 3px rgba(45, 90, 59, 0.15);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Radios y Checkboxes alineados */
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.radio-option, .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--verde-elfico);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* --- MENSAJES DE ERROR Y ESTADOS INVÁLIDOS --- */
+.error-message {
+    color: var(--alerta-rojo);
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+    display: none;
+    font-weight: 500;
+}
+
+/* Clases dinámicas aplicadas por JavaScript */
+.is-invalid {
+    border-color: var(--alerta-rojo) !important;
+    background-color: var(--alerta-fondo) !important;
+}
+
+.is-invalid-check {
+    outline: 2px solid var(--alerta-rojo);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* --- BOTÓN --- */
+button[type="submit"] {
+    background-color: var(--verde-elfico);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--verde-oscuro);
+}
+
+/* --- SECCIÓN DE REGISTROS DINÁMICOS --- */
+.records-section {
+    margin-top: 3.5rem;
+    border-top: 2px dashed var(--gris-piedra);
+    padding-top: 2rem;
+}
+
+.records-section h2 {
+    color: var(--verde-oscuro);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gris-piedra);
+}
+
+th {
+    background-color: var(--verde-oscuro);
+    color: white;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(229, 231, 235, 0.3);
+}
+
+.empty-message {
+    color: var(--gris-pizarra);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+}
